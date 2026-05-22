@@ -1,6 +1,4 @@
-cd ~/demo-app
-nano Jenkinsfilepipeline {
-
+pipeline {
     agent any
 
     tools {
@@ -30,30 +28,18 @@ nano Jenkinsfilepipeline {
 
         stage('Run') {
             steps {
-                sh 'mvn exec:java -Dexec.mainClass="com.example.app.App"'
+                sh 'mvn exec:java -Dexec.mainClass=com.example.app.App'
             }
         }
-
     }
 
     post {
-
         always {
             emailext(
                 subject: "Jenkins Build: ${currentBuild.currentResult}",
-                body: """
-Job Name: ${JOB_NAME}
-
-Build Number: ${BUILD_NUMBER}
-
-Status: ${currentBuild.currentResult}
-
-Build URL: ${BUILD_URL}
-                """,
+                body: "Job: ${JOB_NAME}\nBuild: ${BUILD_NUMBER}\nStatus: ${currentBuild.currentResult}\nURL: ${BUILD_URL}",
                 to: "abhishekms1234.x@gmail.com"
             )
         }
-
     }
-
 }
